@@ -17,7 +17,6 @@ void Queue<T>::Enqueue(T const& item)
 {
 	// complete your implementation below
 	stack_1.Push(item);
-	
 }
 
 /**
@@ -33,14 +32,15 @@ template <class T>
 T Queue<T>::Dequeue()
 {
 	// complete your implementation below
-
-	while (!stack_1.IsEmpty()) {
-		stack_2.Push(stack_1.Pop());
+	T item;
+	if (stack_2.IsEmpty()) {
+		while (!stack_1.IsEmpty()) {
+			stack_2.Push(stack_1.Pop());
+		}
 	}
-
-	T item = stack_2.Pop();
-
-	return item; // REPLACE THESE LINES
+	item = stack_2.Pop();
+	
+	return item;
 }
 
 /**
@@ -99,6 +99,10 @@ T Queue<T>::Peek()
 
 	T item = stack_2.Peek();
 
+	while (!stack_2.IsEmpty()) {
+		stack_1.Push(stack_2.Pop());
+	}
+
 	return item;
 }
 
@@ -115,9 +119,9 @@ bool Queue<T>::IsEmpty() const
 {
 	// complete your implementation below
 
-	if (stack_2.IsEmpty()) {
+	if (stack_1.IsEmpty() && stack_2.IsEmpty()) {
 		return true;
 	}
   
-	return false; // REPLACE THIS STUB
+	return false;
 }

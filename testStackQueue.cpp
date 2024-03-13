@@ -42,8 +42,10 @@ TEST_CASE("Queue::basic functions", "[weight=1][part=queue]") {
     }
     for (int i = 1; i <= 10; i++) {
         intQueue.Enqueue(i);
+        
     }
-    //cout << intStack.peek() << endl;
+    // cout << intQueue.Peek() << endl;
+    
     while (!intQueue.IsEmpty()) {
         result.push_back(intQueue.Dequeue());
         //cout << intStack.pop() << " ";
