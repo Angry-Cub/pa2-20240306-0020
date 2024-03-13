@@ -16,7 +16,7 @@ template <class T>
 void Queue<T>::Enqueue(T const& item)
 {
 	// complete your implementation below
-	stack_1.push(item)
+	stack_1.Push(item);
 	
 }
 
@@ -35,7 +35,7 @@ T Queue<T>::Dequeue()
 	// complete your implementation below
 
 	while (!stack_1.IsEmpty()) {
-		stack_2.Push(stack_1.pop())
+		stack_2.Push(stack_1.Pop());
 	}
 
 	T item = stack_2.Pop();
@@ -70,7 +70,7 @@ T Queue<T>::Remove()
 	// function to remove an element from the Queue and return it. You will
 	// need to replace the following lines.
 
-	T item = Dequeue(item)
+	T item = Dequeue();
 
 	return item; // REPLACE THESE LINES
 }
