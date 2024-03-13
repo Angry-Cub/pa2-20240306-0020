@@ -42,6 +42,15 @@ Stack<T>::~Stack()
 template <class T>
 void Stack<T>::Push(const T& item) {
 	// complete your implementation below
+	num_items++;
+	if (num_items > max_items) {
+		max_items = max_items * EXPANSIONFACTOR;
+		newStack = new T[max_items];
+		for (int i = 0; i < num_items; i++) {
+			newStack[i] = items[i];
+		}
+	}
+	
 	
 }
 
