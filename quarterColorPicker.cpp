@@ -11,6 +11,8 @@
 QuarterColorPicker::QuarterColorPicker(PNG& inputimg, unsigned char b_amount)
 {
     // Complete your implementation below
+    referenceimg = inputimg;
+    brightamount = b_amount;
 	
 }
 
@@ -33,7 +35,34 @@ QuarterColorPicker::QuarterColorPicker(PNG& inputimg, unsigned char b_amount)
 RGBAPixel QuarterColorPicker::operator()(PixelPoint p)
 {
     // Replace the line below with your implementation
-    return RGBAPixel();
+
+
+    int refWidth = referenceimg.width();
+    int refHeight = referenceimg.height();
+    
+
+    int scaledWidth = refWidth / 2;
+    int scaledHeight = refHeight / 2;
+    
+
+    int scaledX = p.x % scaledWidth;
+    int scaledY = p.y % scaledHeight;
+    
+
+    int tiledX = scaledX * 2;
+    int tiledY = scaledY * 2;
+
+
+    
+    // Get the pixel at the corresponding coordinates in the tiled image
+    RGBAPixel* pixel = referenceimg.getPixel(tiledX, tiledY);
+    
+    // Brighten the pixel on each R/G/B channel by the required amount
+    pixel.r = min(pixel.r + brightamount, 255);
+    pixel.g = min(pixel.g + brightamount, 255);
+    pixel.b = min(pixel.b + brightamount, 255);
+    
+    return pixel;
 }
 
 /**

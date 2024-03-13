@@ -18,6 +18,9 @@
 StripeColorPicker::StripeColorPicker(unsigned int stripe_width, RGBAPixel stripe_color1, RGBAPixel stripe_color2)
 {
     // Complete your implementation below
+    stripewidth = stripe_width;
+    color1 = stripe_color1;
+    color2 = stripe_color2;
 	
 }
 
@@ -35,8 +38,18 @@ StripeColorPicker::StripeColorPicker(unsigned int stripe_width, RGBAPixel stripe
  */
 RGBAPixel StripeColorPicker::operator()(PixelPoint p)
 {
-    // Replace the line below with your implementation
-    return RGBAPixel();
+    int x = p.x;
+    int y = p.y;
+    
+    // Calculate the stripe index based on the x and y coordinates
+    int stripeIndex = (x + y) / stripewidth;
+    
+    // Determine the color based on the stripe index
+    if (stripeIndex % 2 == 0) {
+        return color1;
+    } else {
+        return color2;
+    }
 }
 
 /**
