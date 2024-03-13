@@ -37,32 +37,32 @@ RGBAPixel QuarterColorPicker::operator()(PixelPoint p)
     // Replace the line below with your implementation
 
 
-    int refWidth = referenceimg.width();
-    int refHeight = referenceimg.height();
+    // int refWidth = referenceimg.width();
+    // int refHeight = referenceimg.height();
     
 
-    int scaledWidth = refWidth / 2;
-    int scaledHeight = refHeight / 2;
+    // int scaledWidth = refWidth / 2;
+    // int scaledHeight = refHeight / 2;
     
 
-    int scaledX = p.x % scaledWidth;
-    int scaledY = p.y % scaledHeight;
+    // int scaledX = p.x % scaledWidth;
+    // int scaledY = p.y % scaledHeight;
     
 
-    int tiledX = scaledX * 2;
-    int tiledY = scaledY * 2;
+    // int tiledX = scaledX * 2;
+    // int tiledY = scaledY * 2;
 
 
     
-    // Get the pixel at the corresponding coordinates in the tiled image
-    RGBAPixel* pixel = referenceimg.getPixel(tiledX, tiledY);
+    // // Get the pixel at the corresponding coordinates in the tiled image
+    // RGBAPixel* pixel = referenceimg.getPixel(tiledX, tiledY);
     
-    // Brighten the pixel on each R/G/B channel by the required amount
-    pixel.r = min(pixel.r + brightamount, 255);
-    pixel.g = min(pixel.g + brightamount, 255);
-    pixel.b = min(pixel.b + brightamount, 255);
+    // // Brighten the pixel on each R/G/B channel by the required amount
+    // pixel.r = min(pixel.r + brightamount, 255);
+    // pixel.g = min(pixel.g + brightamount, 255);
+    // pixel.b = min(pixel.b + brightamount, 255);
     
-    return pixel;
+    // return pixel;
 }
 
 /**
