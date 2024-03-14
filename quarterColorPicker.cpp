@@ -13,7 +13,7 @@ QuarterColorPicker::QuarterColorPicker(PNG& inputimg, unsigned char b_amount)
     // Complete your implementation below
     referenceimg = inputimg;
     brightamount = b_amount;
-	
+	//balls
 }
 
 /**
