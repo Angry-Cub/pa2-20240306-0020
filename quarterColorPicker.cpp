@@ -7,6 +7,8 @@
  */
 
 #include "quarterColorPicker.h"
+#include "quarterColorPicker_private.h"
+using namespace cs221util;
 
 QuarterColorPicker::QuarterColorPicker(PNG& inputimg, unsigned char b_amount)
 {
@@ -34,37 +36,50 @@ QuarterColorPicker::QuarterColorPicker(PNG& inputimg, unsigned char b_amount)
  */
 RGBAPixel QuarterColorPicker::operator()(PixelPoint p)
 {
-    // Replace the line below with your implementation
+    PNG scaledImage(referenceimg.width() / 2, referenceimg.height() / 2);
 
+    for (unsigned int y = 0; y < referenceimg.height(); y += 2) {
+        for (unsigned int x = 0; x < referenceimg.width(); x += 2) {
+            RGBAPixel interpolatedPixel = bilinearInterpolation(referenceimg, x, y);
 
+            *scaledImage.getPixel(x / 2, y / 2) = interpolatedPixel;
+        }
+    }
 
-    
+    RGBAPixel pixel = *scaledImage.getPixel(p.x % scaledImage.width(), p.y % scaledImage.height());
 
-    int scaledWidth = referenceimg.width() / 2;
-    int scaledHeight = referenceimg.height() / 2;
+    pixel.r = std::min(255, pixel.r + brightamount);
+    pixel.g = std::min(255, pixel.g + brightamount);
+    pixel.b = std::min(255, pixel.b + brightamount);
 
-    int scaledX = p.x % scaledWidth;
-    int scaledY = p.y % scaledHeight;
-
-    int tiledX = scaledX * 2;
-    int tiledY = scaledY * 2;
-
-    // Get the pixel at the corresponding coordinates in the tiled image
-    RGBAPixel* pixel = referenceimg.getPixel(tiledX, tiledY);
-
-    // Calculate the new brightness for each color channel
-    int newR = pixel->r + brightamount;
-    int newG = pixel->g + brightamount;
-    int newB = pixel->b + brightamount;
-
-    // Clamp the brightness values to the range [0, 255]
-    // pixel->r = (newR > 255) ? 255 : (newR < 0) ? 0 : newR;
-    // pixel->g = (newG > 255) ? 255 : (newG < 0) ? 0 : newG;
-    // pixel->b = (newB > 255) ? 255 : (newB < 0) ? 0 : newB;
-
-    return *pixel;
+    return pixel;
+   
 }
+
+
 
 /**
  * Add your private QuarterColorPicker function implementations below
  */
+
+RGBAPixel QuarterColorPicker::bilinearInterpolation(const PNG& img, unsigned int x, unsigned int y) {
+
+    RGBAPixel p1 = *img.getPixel(x, y);
+    RGBAPixel p2 = *img.getPixel(x + 1, y);
+    RGBAPixel p3 = *img.getPixel(x, y + 1);
+    RGBAPixel p4 = *img.getPixel(x + 1, y + 1);
+
+    RGBAPixel interpolatedColor;
+    interpolatedColor.r = ((p1.r+p2.r)/2 + (p3.r+p4.r)/2)/2;
+
+    interpolatedColor.g = ((p1.g+p2.g)/2 + (p3.g+p4.g)/2)/2;
+
+    interpolatedColor.b = ((p1.b+p2.b)/2 + (p3.b+p4.b)/2)/2;
+
+    
+    interpolatedColor.r = static_cast<unsigned int>(interpolatedColor.r);
+    interpolatedColor.g = static_cast<unsigned int>(interpolatedColor.g);
+    interpolatedColor.b = static_cast<unsigned int>(interpolatedColor.b);
+
+    return interpolatedColor;
+}

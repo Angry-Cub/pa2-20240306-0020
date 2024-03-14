@@ -10,3 +10,5 @@
  */
 
  // begin your declarations below
+
+RGBAPixel bilinearInterpolation(const PNG& img, unsigned int x, unsigned int y);
