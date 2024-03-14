@@ -10,3 +10,6 @@
  */
 
  // begin your declarations below
+
+ bool isWithinTolerance(const RGBAPixel &p1, const RGBAPixel &p2, double tolerance);
+ bool isNearBorder(const PixelPoint &p, const PNG &img, double borderwidth, double tolerance, const RGBAPixel &seedcolor);
