@@ -58,9 +58,9 @@ RGBAPixel QuarterColorPicker::operator()(PixelPoint p)
     int newB = pixel->b + brightamount;
 
     // Clamp the brightness values to the range [0, 255]
-    pixel->r = (newR > 255) ? 255 : (newR < 0) ? 0 : newR;
-    pixel->g = (newG > 255) ? 255 : (newG < 0) ? 0 : newG;
-    pixel->b = (newB > 255) ? 255 : (newB < 0) ? 0 : newB;
+    // pixel->r = (newR > 255) ? 255 : (newR < 0) ? 0 : newR;
+    // pixel->g = (newG > 255) ? 255 : (newG < 0) ? 0 : newG;
+    // pixel->b = (newB > 255) ? 255 : (newB < 0) ? 0 : newB;
 
     return *pixel;
 }
