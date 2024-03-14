@@ -13,7 +13,7 @@ QuarterColorPicker::QuarterColorPicker(PNG& inputimg, unsigned char b_amount)
     // Complete your implementation below
     referenceimg = inputimg;
     brightamount = b_amount;
-	
+	//balls
 }
 
 /**
@@ -34,12 +34,6 @@ QuarterColorPicker::QuarterColorPicker(PNG& inputimg, unsigned char b_amount)
  */
 RGBAPixel QuarterColorPicker::operator()(PixelPoint p)
 {
-    // Replace the line below with your implementation
-
-
-
-    
-
     int scaledWidth = referenceimg.width() / 2;
     int scaledHeight = referenceimg.height() / 2;
 
@@ -49,22 +43,44 @@ RGBAPixel QuarterColorPicker::operator()(PixelPoint p)
     int tiledX = scaledX * 2;
     int tiledY = scaledY * 2;
 
-    // Get the pixel at the corresponding coordinates in the tiled image
-    RGBAPixel* pixel = referenceimg.getPixel(tiledX, tiledY);
+    // Get the four neighboring pixels for bilinear interpolation
+    RGBAPixel* pixel00 = referenceimg.getPixel(tiledX, tiledY);
+    RGBAPixel* pixel01 = referenceimg.getPixel(tiledX + 1, tiledY);
+    RGBAPixel* pixel10 = referenceimg.getPixel(tiledX, tiledY + 1);
+    RGBAPixel* pixel11 = referenceimg.getPixel(tiledX + 1, tiledY + 1);
 
-    // Calculate the new brightness for each color channel
-    int newR = pixel->r + brightamount;
-    int newG = pixel->g + brightamount;
-    int newB = pixel->b + brightamount;
+    // Perform bilinear interpolation for each color channel
+    float deltaX = (scaledX) / scaledWidth;
+    float deltaY = (scaledY) / scaledHeight;
+
+    int newR = ((1 - deltaX) * (1 - deltaY) * pixel00->r +
+                                 deltaX * (1 - deltaY) * pixel01->r +
+                                 (1 - deltaX) * deltaY * pixel10->r +
+                                 deltaX * deltaY * pixel11->r) + brightamount;
+    
+    int newG = ((1 - deltaX) * (1 - deltaY) * pixel00->g +
+                                 deltaX * (1 - deltaY) * pixel01->g +
+                                 (1 - deltaX) * deltaY * pixel10->g +
+                                 deltaX * deltaY * pixel11->g) + brightamount;
+
+    int newB = ((1 - deltaX) * (1 - deltaY) * pixel00->b +
+                                 deltaX * (1 - deltaY) * pixel01->b +
+                                 (1 - deltaX) * deltaY * pixel10->b +
+                                 deltaX * deltaY * pixel11->b) + brightamount;
 
     // Clamp the brightness values to the range [0, 255]
-    // pixel->r = (newR > 255) ? 255 : (newR < 0) ? 0 : newR;
-    // pixel->g = (newG > 255) ? 255 : (newG < 0) ? 0 : newG;
-    // pixel->b = (newB > 255) ? 255 : (newB < 0) ? 0 : newB;
+    newR = std::min(std::max(newR, 0), 255);
+    newG = std::min(std::max(newG, 0), 255);
+    newB = std::min(std::max(newB, 0), 255);
 
-    return *pixel;
+    // Create a new pixel with the adjusted brightness
+    RGBAPixel newPixel(newR, newG, newB);
+
+    return newPixel;
 }
 
 /**
  * Add your private QuarterColorPicker function implementations below
  */
+
+ 
