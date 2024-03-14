@@ -18,7 +18,12 @@
  */
 BorderColorPicker::BorderColorPicker(unsigned int width, PNG& inputimage, RGBAPixel scolor, RGBAPixel bcolor, double tol)
 {
-    // Complete your implementation belowvgy
+    // Complete your implementation below
+    borderwidth = width;
+    img = inputimage;
+    seedcolor = scolor;
+    bordercolor = bcolor;
+    tolerance = tol;
 	
 }
 
@@ -40,3 +45,4 @@ RGBAPixel BorderColorPicker::operator()(PixelPoint p)
 /**
  * Add your private BorderColorPicker function implementations below
  */
+// sqrt( pow( x2 - x1, 2 ) + pow( y2 - y1, 2 ) )
