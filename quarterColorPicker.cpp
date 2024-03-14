@@ -37,32 +37,32 @@ RGBAPixel QuarterColorPicker::operator()(PixelPoint p)
     // Replace the line below with your implementation
 
 
-    // int refWidth = referenceimg.width();
-    // int refHeight = referenceimg.height();
-    
-
-    // int scaledWidth = refWidth / 2;
-    // int scaledHeight = refHeight / 2;
-    
-
-    // int scaledX = p.x % scaledWidth;
-    // int scaledY = p.y % scaledHeight;
-    
-
-    // int tiledX = scaledX * 2;
-    // int tiledY = scaledY * 2;
-
 
     
-    // // Get the pixel at the corresponding coordinates in the tiled image
-    // RGBAPixel* pixel = referenceimg.getPixel(tiledX, tiledY);
-    
-    // // Brighten the pixel on each R/G/B channel by the required amount
-    // pixel.r = min(pixel.r + brightamount, 255);
-    // pixel.g = min(pixel.g + brightamount, 255);
-    // pixel.b = min(pixel.b + brightamount, 255);
-    
-    // return pixel;
+
+    int scaledWidth = referenceimg.width() / 2;
+    int scaledHeight = referenceimg.height() / 2;
+
+    int scaledX = p.x % scaledWidth;
+    int scaledY = p.y % scaledHeight;
+
+    int tiledX = scaledX * 2;
+    int tiledY = scaledY * 2;
+
+    // Get the pixel at the corresponding coordinates in the tiled image
+    RGBAPixel* pixel = referenceimg.getPixel(tiledX, tiledY);
+
+    // Calculate the new brightness for each color channel
+    int newR = pixel->r + brightamount;
+    int newG = pixel->g + brightamount;
+    int newB = pixel->b + brightamount;
+
+    // Clamp the brightness values to the range [0, 255]
+    // pixel->r = (newR > 255) ? 255 : (newR < 0) ? 0 : newR;
+    // pixel->g = (newG > 255) ? 255 : (newG < 0) ? 0 : newG;
+    // pixel->b = (newB > 255) ? 255 : (newB < 0) ? 0 : newB;
+
+    return *pixel;
 }
 
 /**
