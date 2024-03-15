@@ -39,63 +39,93 @@ BorderColorPicker::BorderColorPicker(unsigned int width, PNG& inputimage, RGBAPi
  */
 RGBAPixel BorderColorPicker::operator()(PixelPoint p)
 {
-
-    RGBAPixel originPixel = *img.getPixel(p.x, p.y);
-    // Replace the line below with your implementation
-    if (isNearBorder(p, img, borderwidth, tolerance, seedcolor) && isWithinTolerance(originPixel, seedcolor, tolerance)) {
-        return bordercolor;
-    }
-    else {
-        return *img.getPixel(p.x, p.y);
-    }
-}
-
-/**
- * Add your private BorderColorPicker function implementations below
- */
-
-bool BorderColorPicker::isWithinTolerance(const RGBAPixel &p1, const RGBAPixel &p2, double tolerance){
-    int redDiff = abs(p1.r - p2.r);
-    int greenDiff = abs(p1.g - p2.g);
-    int blueDiff = abs(p1.b - p2.b);
-
-    if (redDiff <= tolerance && greenDiff <= tolerance && blueDiff <= tolerance) {
-        return true;
-    }
-
-    return false;
-
-
-
-}
-
-
-
-bool BorderColorPicker::isNearBorder(const PixelPoint &p, const PNG &img, double borderwidth, double tolerance, const RGBAPixel &seedcolor){
     int x = p.x;
     int y = p.y;
     int imgWidth = img.width();
     int imgHeight = img.height();
 
-    // Check if the pixel is within the border width using Euclidean distance
-    int distanceFromBorder = sqrt(pow(x, 2) + pow(y, 2));
-    if (distanceFromBorder <= borderwidth || distanceFromBorder >= sqrt(pow(imgWidth - x, 2) + pow(imgHeight - y, 2)) - borderwidth) {
-        return true;
+    if (borderwidth >  x || borderwidth > y || x >= imgWidth - borderwidth || y >= imgHeight - borderwidth) {
+        RGBAPixel pixel1 = *img.getPixel(x, y);
+        double dist = pixel1.distanceTo(seedcolor);
+        if (dist <= tolerance) {
+            return bordercolor;
+        } else {
+            return *img.getPixel(x,y);
+        }
     }
 
-    // // Check if the pixel is within the tolerance range of the seed color
-    // RGBAPixel pixel = *img.getPixel(x, y);
-    // int seedRed = seedcolor.r;
-    // int seedGreen = seedcolor.g;
-    // int seedBlue = seedcolor.b;
-    // int pixelRed = pixel.r;
-    // int pixelGreen = pixel.g;
-    // int pixelBlue = pixel.b;
+    int euclidDist = borderwidth*borderwidth;
 
-    // if (abs(seedRed - pixelRed) <= tolerance && abs(seedGreen - pixelGreen) <= tolerance && abs(seedBlue - pixelBlue) <= tolerance) {
-    //     return true;
-    // }
+    for (int currY = y - borderwidth; currY <= y + borderwidth; currY++) {
+        for (int currX = x - borderwidth; currX <= x + borderwidth; currX++) {
+            if ((currX-x)*(currX-x) + (currY-y)*(currY-y) <= euclidDist) {
+                RGBAPixel *currPixel = img.getPixel(currX, currY);
+                if (currPixel->distanceTo(seedcolor) > tolerance) {
+                    if (img.getPixel(p.x, p.y)->distanceTo(seedcolor) > tolerance) {
+                        return *img.getPixel(x, y);
+                    }
+                    return bordercolor;
+                }
+            }
+        }
+    }
 
-    return false;
+    return *img.getPixel(x, y);
 }
 
+
+
+
+
+// RGBAPixel originPixel = *img.getPixel(p.x, p.y);
+//     // Replace the line below with your implementation
+//     if (isNearBorder(p, img, borderwidth, tolerance, seedcolor) && isWithinTolerance(originPixel, seedcolor, tolerance)) {
+//         if (img.getPixel(p.x, p.y)->distanceTo(seedcolor) > tolerance) {
+//             return *img.getPixel(p.x, p.y);
+//         }
+//         return bordercolor;
+//     }
+//     else {
+//         return *img.getPixel(p.x, p.y);
+//     }
+// }
+
+// /**
+//  * Add your private BorderColorPicker function implementations below
+//  */
+
+// bool BorderColorPicker::isWithinTolerance(const RGBAPixel &p1, const RGBAPixel &p2, double tolerance){
+//     int redDiff = abs(p1.r - p2.r);
+//     int greenDiff = abs(p1.g - p2.g);
+//     int blueDiff = abs(p1.b - p2.b);
+
+
+
+//     if (redDiff <= tolerance && greenDiff <= tolerance && blueDiff < tolerance) {
+//         return true;
+//     }
+
+//     return false;
+// }
+
+// bool BorderColorPicker::isNearBorder(const PixelPoint &p, const PNG &img, double borderwidth, double tolerance, const RGBAPixel &seedcolor){
+//     int x = p.x;
+//     int y = p.y;
+//     int imgWidth = img.width();
+//     int imgHeight = img.height();
+
+//     // Calculate the distances from the nearest edges
+//     int distanceFromLeftEdge = x;
+//     int distanceFromRightEdge = imgWidth - x - 1; // -1 to account for 0-based indexing
+//     int distanceFromTopEdge = y;
+//     int distanceFromBottomEdge = imgHeight - y - 1; // -1 to account for 0-based indexing
+
+//     // Calculate the minimum distance from any edge
+//     int minDistance = min(min(distanceFromLeftEdge, distanceFromRightEdge), min(distanceFromTopEdge, distanceFromBottomEdge));
+
+//     // Check if the pixel is within the border width using Euclidean distance
+//     if (minDistance <= borderwidth) {
+//         return true;
+//     }
+
+//     return false;
