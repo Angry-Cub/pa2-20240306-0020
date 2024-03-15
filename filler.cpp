@@ -1,3 +1,4 @@
+#include "animation.h"
 /**
  * @file        filler.cpp
  * @description Implementation of functions in the filler namespace.
